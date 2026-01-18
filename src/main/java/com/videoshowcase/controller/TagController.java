@@ -27,4 +27,24 @@ public class TagController {
     public ResponseEntity<VideoTag> getTagById(@PathVariable Long id) {
         return ResponseEntity.ok(tagService.getTagById(id));
     }
+
+    @PostMapping
+    @Operation(summary = "创建标签")
+    public ResponseEntity<VideoTag> createTag(@RequestBody VideoTag tag) {
+        return ResponseEntity.ok(tagService.createTag(tag));
+    }
+
+    @PutMapping("/{id}")
+    @Operation(summary = "更新标签")
+    public ResponseEntity<VideoTag> updateTag(@PathVariable Long id, @RequestBody VideoTag tag) {
+        tag.setId(id);
+        return ResponseEntity.ok(tagService.updateTag(tag));
+    }
+
+    @DeleteMapping("/{id}")
+    @Operation(summary = "删除标签")
+    public ResponseEntity<Void> deleteTag(@PathVariable Long id) {
+        tagService.deleteTag(id);
+        return ResponseEntity.ok().build();
+    }
 }

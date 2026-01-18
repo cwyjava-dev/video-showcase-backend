@@ -70,4 +70,52 @@ public class VideoService {
             Video.VideoStatus.PUBLISHED, keyword, pageable
         );
     }
+
+    /**
+     * 创建视频
+     */
+    public Video createVideo(Video video) {
+        try {
+            if (video.getViews() == null) {
+                video.setViews(0L);
+            }
+            if (video.getStatus() == null) {
+                video.setStatus(Video.VideoStatus.DRAFT);
+            }
+            return videoRepository.save(video);
+        } catch (Exception e) {
+            log.error("创建视频失败", e);
+            throw new RuntimeException("创建视频失败: " + e.getMessage());
+        }
+    }
+
+    /**
+     * 更新视频
+     */
+    public Video updateVideo(Video video) {
+        try {
+            if (!videoRepository.existsById(video.getId())) {
+                throw new RuntimeException("视频不存在");
+            }
+            return videoRepository.save(video);
+        } catch (Exception e) {
+            log.error("更新视频失败", e);
+            throw new RuntimeException("更新视频失败: " + e.getMessage());
+        }
+    }
+
+    /**
+     * 删除视频
+     */
+    public void deleteVideo(Long id) {
+        try {
+            if (!videoRepository.existsById(id)) {
+                throw new RuntimeException("视频不存在");
+            }
+            videoRepository.deleteById(id);
+        } catch (Exception e) {
+            log.error("删除视频失败", e);
+            throw new RuntimeException("删除视频失败: " + e.getMessage());
+        }
+    }
 }

@@ -27,4 +27,24 @@ public class CategoryController {
     public ResponseEntity<Category> getCategoryById(@PathVariable Long id) {
         return ResponseEntity.ok(categoryService.getCategoryById(id));
     }
+
+    @PostMapping
+    @Operation(summary = "创建分类")
+    public ResponseEntity<Category> createCategory(@RequestBody Category category) {
+        return ResponseEntity.ok(categoryService.createCategory(category));
+    }
+
+    @PutMapping("/{id}")
+    @Operation(summary = "更新分类")
+    public ResponseEntity<Category> updateCategory(@PathVariable Long id, @RequestBody Category category) {
+        category.setId(id);
+        return ResponseEntity.ok(categoryService.updateCategory(category));
+    }
+
+    @DeleteMapping("/{id}")
+    @Operation(summary = "删除分类")
+    public ResponseEntity<Void> deleteCategory(@PathVariable Long id) {
+        categoryService.deleteCategory(id);
+        return ResponseEntity.ok().build();
+    }
 }

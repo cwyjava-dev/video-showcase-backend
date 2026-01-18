@@ -40,4 +40,24 @@ public class VideoController {
         videoService.incrementViews(id);
         return ResponseEntity.ok("观看次数已增加");
     }
+
+    @PostMapping
+    @Operation(summary = "创建视频")
+    public ResponseEntity<Video> createVideo(@RequestBody Video video) {
+        return ResponseEntity.ok(videoService.createVideo(video));
+    }
+
+    @PutMapping("/{id}")
+    @Operation(summary = "更新视频")
+    public ResponseEntity<Video> updateVideo(@PathVariable Long id, @RequestBody Video video) {
+        video.setId(id);
+        return ResponseEntity.ok(videoService.updateVideo(video));
+    }
+
+    @DeleteMapping("/{id}")
+    @Operation(summary = "删除视频")
+    public ResponseEntity<Void> deleteVideo(@PathVariable Long id) {
+        videoService.deleteVideo(id);
+        return ResponseEntity.ok().build();
+    }
 }
