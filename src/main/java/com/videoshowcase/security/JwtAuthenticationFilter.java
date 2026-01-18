@@ -1,5 +1,7 @@
 package com.videoshowcase.security;
 
+import com.videoshowcase.entity.User;
+import com.videoshowcase.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -12,11 +14,13 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.Optional;
 
 @Slf4j
 @RequiredArgsConstructor
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
     private final JwtTokenProvider tokenProvider;
+    private final UserRepository userRepository;
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
@@ -25,12 +29,20 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             String jwt = getJwtFromRequest(request);
             if (StringUtils.hasText(jwt) && tokenProvider.validateToken(jwt)) {
                 Long userId = Long.parseLong(tokenProvider.getUserIdFromToken(jwt));
-                UserPrincipal userPrincipal = new UserPrincipal(userId, null, null, null, null);
+                
+                // 从数据库加载用户完整信息
+                Optional<User> userOptional = userRepository.findById(userId);
+                if (userOptional.isPresent()) {
+                    User user = userOptional.get();
+                    UserPrincipal userPrincipal = UserPrincipal.create(user);
                     UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(
-                    userId, null, userPrincipal.getAuthorities()
+                        userPrincipal, null, userPrincipal.getAuthorities()
                     );
                     authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
                     SecurityContextHolder.getContext().setAuthentication(authentication);
+                } else {
+                    log.warn("用户不存在: userId={}", userId);
+                }
             }
         } catch (Exception ex) {
             log.error("JWT 认证失败: {}", ex.getMessage());
