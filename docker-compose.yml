@@ -48,7 +48,8 @@ services:
       SPRING_DATASOURCE_PASSWORD: root_password
       JWT_SECRET: 7zX/f1g+uL9yR4pQ8sV2mK3nJ5bH8vC1xD6wZ0oA9eI2rF4tG7jK3mP6nQ9sU1vW
       FILE_STORAGE_PATH: /data/videos
-      FILE_STORAGE_URL: http://localhost:8080/api/files
+      #FILE_STORAGE_URL: http://localhost:8080/api/files
+      FILE_STORAGE_URL: http://192.168.0.247:8080/api/files
     ports:
       - "8080:8080"
     volumes:
