@@ -18,7 +18,7 @@ import java.util.Map;
  * JWT Token 提供者
  * 处理 JWT Token 的生成、验证和解析
  * 
- * 注意：使用最新的 JJWT 0.12.3 版本，修复了 parserBuilder 问题
+ * 注意：使用最新的 JJWT 0.12.3 版本
  */
 @Slf4j
 @Component
@@ -100,11 +100,16 @@ public class JwtTokenProvider {
     private Claims getAllClaimsFromToken(String token) {
         SecretKey key = Keys.hmacShaKeyFor(jwtSecret.getBytes(StandardCharsets.UTF_8));
         
-        return Jwts.parserBuilder()  // ✓ 这是正确的用法（JJWT 0.12.3）
-                .setSigningKey(key)
-                .build()
-                .parseClaimsJws(token)
-                .getBody();
+        try {
+            return Jwts.parser()
+                    .verifyWith(key)
+                    .build()
+                    .parseSignedClaims(token)
+                    .getPayload();
+        } catch (Exception e) {
+            log.error("解析 JWT Token 失败: {}", e.getMessage());
+            throw new RuntimeException("无效的 JWT Token");
+        }
     }
 
     /**
@@ -114,10 +119,10 @@ public class JwtTokenProvider {
         try {
             SecretKey key = Keys.hmacShaKeyFor(jwtSecret.getBytes(StandardCharsets.UTF_8));
             
-            Jwts.parserBuilder()  // ✓ 这是正确的用法（JJWT 0.12.3）
-                    .setSigningKey(key)
+            Jwts.parser()
+                    .verifyWith(key)
                     .build()
-                    .parseClaimsJws(token);
+                    .parseSignedClaims(token);
             
             return true;
         } catch (Exception e) {

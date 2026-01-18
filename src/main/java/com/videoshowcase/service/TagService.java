@@ -1,6 +1,6 @@
 package com.videoshowcase.service;
 
-import com.videoshowcase.entity.Tag;
+import com.videoshowcase.entity.VideoTag;
 import com.videoshowcase.repository.TagRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -13,11 +13,11 @@ import java.util.List;
 public class TagService {
     private final TagRepository tagRepository;
 
-    public List<Tag> getAllTags() {
+    public List<VideoTag> getAllTags() {
         return tagRepository.findAll();
     }
 
-    public Tag getTagById(Long id) {
+    public VideoTag getTagById(Long id) {
         return tagRepository.findById(id)
             .orElseThrow(() -> new RuntimeException("标签不存在"));
     }

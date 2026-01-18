@@ -1,5 +1,3 @@
-version: '3.8'
-
 services:
   mysql:
     image: mysql:8.0
@@ -11,7 +9,8 @@ services:
       - "5506:3306"
     volumes:
       - mysql_data:/var/lib/mysql
-      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
+      #- ./init.sql:/docker-entrypoint-initdb.d/init.sql
+      - ./video-showcase-backend/init.sql:/docker-entrypoint-initdb.d/init.sql
     networks:
       - video-showcase-network
     healthcheck:
@@ -19,9 +18,27 @@ services:
       timeout: 20s
       retries: 10
 
+  frontend:
+    build:
+      context:  ./video-showcase-frontend
+      dockerfile: Dockerfile
+    container_name: video-showcase-frontend
+    ports:
+      - "3003:3000"
+    environment:
+      - NODE_ENV=production
+      - VITE_API_URL=http://localhost:8080/api
+      - VITE_FRONTEND_PORT=3003
+    depends_on:
+      mysql:
+        condition: service_healthy
+    networks:
+      - video-showcase-network
+    restart: unless-stopped
+
   backend:
     build:
-      context: .
+      context:  ./video-showcase-backend
       dockerfile: Dockerfile
     container_name: video-showcase-backend
     environment:

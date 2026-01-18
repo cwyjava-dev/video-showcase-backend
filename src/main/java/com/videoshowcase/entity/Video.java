@@ -40,7 +40,7 @@ public class Video {
         joinColumns = @JoinColumn(name = "video_id"),
         inverseJoinColumns = @JoinColumn(name = "tag_id")
     )
-    private List<Tag> tags;
+    private List<VideoTag> tags;
 
     @Column(nullable = false)
     private Long views = 0L;

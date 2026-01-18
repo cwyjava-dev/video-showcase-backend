@@ -27,8 +27,8 @@ public class AuthService {
         }
 
         User foundUser = user.get();
-        String token = jwtTokenProvider.generateTokenFromUserId(foundUser.getId(), foundUser.getUsername());
-        String refreshToken = jwtTokenProvider.generateRefreshToken(foundUser.getId(), foundUser.getUsername());
+        String token = jwtTokenProvider.generateToken(String.valueOf(foundUser.getId()), foundUser.getUsername());
+        String refreshToken = jwtTokenProvider.generateRefreshToken(String.valueOf(foundUser.getId()));
 
         return AuthResponse.builder()
             .token(token)
@@ -51,8 +51,8 @@ public class AuthService {
             .build();
 
         User savedUser = userRepository.save(newUser);
-        String token = jwtTokenProvider.generateTokenFromUserId(savedUser.getId(), savedUser.getUsername());
-        String refreshToken = jwtTokenProvider.generateRefreshToken(savedUser.getId(), savedUser.getUsername());
+        String token = jwtTokenProvider.generateToken(String.valueOf(savedUser.getId()), savedUser.getUsername());
+        String refreshToken = jwtTokenProvider.generateRefreshToken(String.valueOf(savedUser.getId()));
 
         return AuthResponse.builder()
             .token(token)
