@@ -96,7 +96,6 @@ INSERT INTO tags (name, description, color) VALUES
                                                 ('精选', '精选视频', '#FFD93D'),
                                                 ('独家', '独家视频', '#FF6B9D')
     ON DUPLICATE KEY UPDATE id=id;
-sudo docker exec -it video-showcase-mysql mysql -uroot -proot_password -e "UPDATE video_showcase.users SET password='\$2b\$10\$.rLjuAlGQuXEFR0CIIv7VeS9YywuJGK/.q5CabY0uORBh5NjEr3D6' WHERE username='admin';"
 
 -- 创建默认管理员用户（密码：admin123）
 
