@@ -19,12 +19,10 @@ public class VideoService {
     private final VideoRepository videoRepository;
 
     /**
-     * 获取所有已发布的视频
+     * 获取所有视频
      */
     public List<Video> getAllVideos() {
-        return videoRepository.findAll().stream()
-            .filter(v -> v.getStatus() == Video.VideoStatus.PUBLISHED)
-            .collect(Collectors.toList());
+        return videoRepository.findAll();
     }
 
     /**
