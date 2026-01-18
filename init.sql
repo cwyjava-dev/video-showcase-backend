@@ -98,5 +98,6 @@ INSERT INTO tags (name, description, color) VALUES
     ON DUPLICATE KEY UPDATE id=id;
 
 -- 创建默认管理员用户（密码：admin123）
-INSERT INTO users (username, email, password, display_name, role) VALUES
-    ('admin', 'admin@example.com', '$2a$10$N9qo8uLOickgx2ZMRZoMyeIjZAgcg7b3XeKeUxWdeS86E36P4/TVm', 'Administrator', 'ADMIN');
+INSERT INTO users (username, email, password, display_name, role, active) VALUES
+    ('admin', 'admin@videoshowcase.com', '$2a$10$slYQmyNdGzin7olVN3p5Be7DlH.PKZbv5H8KnzzVgXXbVxzy2QJOG', '管理员', 'ADMIN', TRUE)
+    ON DUPLICATE KEY UPDATE id=id;
