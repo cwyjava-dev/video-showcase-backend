@@ -1,6 +1,10 @@
 spring:
   application:
     name: video-showcase-backend
+    # 静态资源配置
+    web:
+      resources:
+        static-locations: file:/data/videos/
   
   # 数据库配置
   datasource:
@@ -70,8 +74,4 @@ file:
   upload:
     max-size: 104857600  # 最大文件大小（100MB）
 
-# 静态资源配置
-spring:
-  web:
-    resources:
-      static-locations: file:/data/videos/
+
