@@ -33,16 +33,15 @@ spring:
     resources:
       static-locations: file:/data/videos/
 
+  # Servlet 配置
   servlet:
     multipart:
       max-file-size: 100MB      # 单个文件最大大小
       max-request-size: 100MB   # 单次请求总大小
-      # ... existing code ...
 
 # 服务器配置
 server:
   port: 8080
-
 
 # JWT 配置
 jwt:
@@ -75,7 +74,7 @@ springdoc:
 # 文件存储配置
 file:
   storage:
-    path: /data/videos  # 本地存储路径，可自定义
-    url: http://localhost:8080/api/files  # 文件访问 URL
+    path: ${FILE_STORAGE_PATH:/data/videos}  # 本地存储路径，可自定义
+    url: ${FILE_STORAGE_URL:http://localhost:8080/api/files}  # 文件访问 URL（使用环境变量）
   upload:
     max-size: 104857600  # 最大文件大小（100MB）
