@@ -51,7 +51,7 @@ services:
       SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/video_showcase?useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true
       SPRING_DATASOURCE_USERNAME: root
       SPRING_DATASOURCE_PASSWORD: root_password
-      JWT_SECRET: your-secret-key-change-this-in-production-environment-with-minimum-32-characters
+      JWT_SECRET: trU4FbZPQWWUFqjKy31hZiIAcwrRw4WDntVqQE/qpA48jPriaXEPafZx+es0yyAiti8weFNunfCPhtifeppjUw==
       FILE_STORAGE_PATH: /data/videos
       FILE_STORAGE_URL: http://localhost:8080/api/files
     ports:
