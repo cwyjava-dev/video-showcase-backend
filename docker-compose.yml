@@ -24,7 +24,7 @@ services:
       dockerfile: Dockerfile
     container_name: video-showcase-frontend
     ports:
-      - "3003:3000"
+      - "3003:3003"
     environment:
       - NODE_ENV=production
       - VITE_API_URL=http://localhost:8080/api
