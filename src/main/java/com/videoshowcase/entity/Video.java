@@ -54,7 +54,7 @@ public class Video {
     private VideoStatus status = VideoStatus.DRAFT;
 
     @ManyToOne
-    @JoinColumn(name = "created_by")
+    @JoinColumn(name = "user_id")
     private User createdBy;
 
     private LocalDateTime createdAt = LocalDateTime.now();

@@ -48,19 +48,11 @@ public class VideoController {
     @Operation(summary = "创建视频")
     public ResponseEntity<Video> createVideo(@RequestBody Video video, Authentication authentication) {
         // 从认证信息中获取当前用户
-        System.out.println("Authentication: " + authentication);
-        if (authentication != null) {
-            System.out.println("Principal: " + authentication.getPrincipal());
-            System.out.println("Principal class: " + authentication.getPrincipal().getClass());
-        }
         if (authentication != null && authentication.getPrincipal() instanceof UserPrincipal) {
             UserPrincipal principal = (UserPrincipal) authentication.getPrincipal();
-            System.out.println("User ID: " + principal.getId());
             User user = new User();
             user.setId(principal.getId());
             video.setCreatedBy(user);
-        } else {
-            System.out.println("Authentication is null or principal is not UserPrincipal");
         }
         return ResponseEntity.ok(videoService.createVideo(video));
     }
