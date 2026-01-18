@@ -5,7 +5,7 @@ services:
     environment:
       MYSQL_ROOT_PASSWORD: root_password
       MYSQL_DATABASE: video_showcase
-      command: --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci --default-character-set=utf8mb4 --init-connect='SET NAMES utf8mb4' --skip-character-set-client-handshake
+    command: --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci --default-character-set=utf8mb4 --init-connect='SET NAMES utf8mb4' --skip-character-set-client-handshake
     ports:
       - "5506:3306"
     volumes:
@@ -43,7 +43,7 @@ services:
       dockerfile: Dockerfile
     container_name: video-showcase-backend
     environment:
-      SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/video_showcase?useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/video_showcase?useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true&useUnicode=true&characterEncoding=utf8mb4
       SPRING_DATASOURCE_USERNAME: root
       SPRING_DATASOURCE_PASSWORD: root_password
       JWT_SECRET: 7zX/f1g+uL9yR4pQ8sV2mK3nJ5bH8vC1xD6wZ0oA9eI2rF4tG7jK3mP6nQ9sU1vW
