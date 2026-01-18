@@ -4,7 +4,7 @@ spring:
   
   # 数据库配置
   datasource:
-    url: jdbc:mysql://mysql:5506/video_showcase?useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true
+    url: jdbc:mysql://mysql:3306/video_showcase?useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true&characterEncoding=utf8mb4&useUnicode=true
     username: root
     password: root_password
     driver-class-name: com.mysql.cj.jdbc.Driver

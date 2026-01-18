@@ -5,7 +5,7 @@ services:
     environment:
       MYSQL_ROOT_PASSWORD: root_password
       MYSQL_DATABASE: video_showcase
-      command: --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci --default-character-set=utf8mb4
+      command: --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci --default-character-set=utf8mb4 --init-connect='SET NAMES utf8mb4' --skip-character-set-client-handshake
     ports:
       - "5506:3306"
     volumes:
