@@ -1,11 +1,14 @@
 package com.videoshowcase.controller;
 
 import com.videoshowcase.entity.Video;
+import com.videoshowcase.entity.User;
 import com.videoshowcase.service.VideoService;
+import com.videoshowcase.security.UserPrincipal;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
@@ -43,7 +46,14 @@ public class VideoController {
 
     @PostMapping
     @Operation(summary = "创建视频")
-    public ResponseEntity<Video> createVideo(@RequestBody Video video) {
+    public ResponseEntity<Video> createVideo(@RequestBody Video video, Authentication authentication) {
+        // 从认证信息中获取当前用户
+        if (authentication != null && authentication.getPrincipal() instanceof UserPrincipal) {
+            UserPrincipal principal = (UserPrincipal) authentication.getPrincipal();
+            User user = new User();
+            user.setId(principal.getId());
+            video.setCreatedBy(user);
+        }
         return ResponseEntity.ok(videoService.createVideo(video));
     }
 

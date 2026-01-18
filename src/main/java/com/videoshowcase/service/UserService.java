@@ -50,15 +50,29 @@ public class UserService {
             if (!userRepository.existsById(user.getId())) {
                 throw new RuntimeException("用户不存在");
             }
-            // 如果更新了密码，需要加密
-            if (user.getPassword() != null && !user.getPassword().isEmpty()) {
-                user.setPassword(passwordEncoder.encode(user.getPassword()));
-            } else {
-                // 保留原密码
-                User existingUser = userRepository.findById(user.getId()).get();
-                user.setPassword(existingUser.getPassword());
+            
+            // 获取现有用户信息
+            User existingUser = userRepository.findById(user.getId()).get();
+            
+            // 只更新非 null 的字段
+            if (user.getEmail() != null && !user.getEmail().isEmpty()) {
+                existingUser.setEmail(user.getEmail());
             }
-            return userRepository.save(user);
+            
+            if (user.getDisplayName() != null && !user.getDisplayName().isEmpty()) {
+                existingUser.setDisplayName(user.getDisplayName());
+            }
+            
+            if (user.getRole() != null) {
+                existingUser.setRole(user.getRole());
+            }
+            
+            // 如果提供了新密码，进行加密
+            if (user.getPassword() != null && !user.getPassword().isEmpty()) {
+                existingUser.setPassword(passwordEncoder.encode(user.getPassword()));
+            }
+            
+            return userRepository.save(existingUser);
         } catch (Exception e) {
             log.error("更新用户失败", e);
             throw new RuntimeException("更新用户失败: " + e.getMessage());
