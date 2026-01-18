@@ -33,9 +33,16 @@ spring:
     resources:
       static-locations: file:/data/videos/
 
+  servlet:
+    multipart:
+      max-file-size: 100MB      # 单个文件最大大小
+      max-request-size: 100MB   # 单次请求总大小
+      # ... existing code ...
+
 # 服务器配置
 server:
   port: 8080
+
 
 # JWT 配置
 jwt:
