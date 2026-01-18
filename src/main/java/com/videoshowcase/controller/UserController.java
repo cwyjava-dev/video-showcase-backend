@@ -36,9 +36,8 @@ public class UserController {
 
     @PutMapping("/{id}")
     @Operation(summary = "更新用户")
-    public ResponseEntity<User> updateUser(@PathVariable Long id, @RequestBody User user) {
-        user.setId(id);
-        return ResponseEntity.ok(userService.updateUser(user));
+    public ResponseEntity<User> updateUser(@PathVariable Long id, @RequestBody com.videoshowcase.dto.UserUpdateRequest updateRequest) {
+        return ResponseEntity.ok(userService.updateUser(id, updateRequest));
     }
 
     @DeleteMapping("/{id}")

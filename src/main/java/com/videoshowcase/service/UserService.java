@@ -45,31 +45,31 @@ public class UserService {
         }
     }
 
-    public User updateUser(User user) {
+    public User updateUser(Long id, com.videoshowcase.dto.UserUpdateRequest updateRequest) {
         try {
-            if (!userRepository.existsById(user.getId())) {
+            if (!userRepository.existsById(id)) {
                 throw new RuntimeException("用户不存在");
             }
             
             // 获取现有用户信息
-            User existingUser = userRepository.findById(user.getId()).get();
+            User existingUser = userRepository.findById(id).get();
             
             // 只更新非 null 的字段
-            if (user.getEmail() != null && !user.getEmail().isEmpty()) {
-                existingUser.setEmail(user.getEmail());
+            if (updateRequest.getEmail() != null && !updateRequest.getEmail().isEmpty()) {
+                existingUser.setEmail(updateRequest.getEmail());
             }
             
-            if (user.getDisplayName() != null && !user.getDisplayName().isEmpty()) {
-                existingUser.setDisplayName(user.getDisplayName());
+            if (updateRequest.getDisplayName() != null && !updateRequest.getDisplayName().isEmpty()) {
+                existingUser.setDisplayName(updateRequest.getDisplayName());
             }
             
-            if (user.getRole() != null) {
-                existingUser.setRole(user.getRole());
+            if (updateRequest.getRole() != null) {
+                existingUser.setRole(updateRequest.getRole());
             }
             
             // 如果提供了新密码，进行加密
-            if (user.getPassword() != null && !user.getPassword().isEmpty()) {
-                existingUser.setPassword(passwordEncoder.encode(user.getPassword()));
+            if (updateRequest.getPassword() != null && !updateRequest.getPassword().isEmpty()) {
+                existingUser.setPassword(passwordEncoder.encode(updateRequest.getPassword()));
             }
             
             return userRepository.save(existingUser);
