@@ -1,5 +1,6 @@
 package com.videoshowcase.config;
 
+import com.videoshowcase.repository.UserRepository;
 import com.videoshowcase.security.JwtAuthenticationFilter;
 import com.videoshowcase.security.JwtTokenProvider;
 import lombok.RequiredArgsConstructor;
@@ -21,9 +22,15 @@ import java.util.Arrays;
 @RequiredArgsConstructor
 public class SecurityConfig {
     private final JwtTokenProvider jwtTokenProvider;
+    private final UserRepository userRepository;
 
     @Bean
-    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+    public JwtAuthenticationFilter jwtAuthenticationFilter() {
+        return new JwtAuthenticationFilter(jwtTokenProvider, userRepository);
+    }
+
+    @Bean
+    public SecurityFilterChain filterChain(HttpSecurity http, JwtAuthenticationFilter jwtAuthenticationFilter) throws Exception {
         http
             .csrf(csrf -> csrf.disable())
             .cors(cors -> cors.configurationSource(corsConfigurationSource()))
@@ -38,7 +45,7 @@ public class SecurityConfig {
                 .requestMatchers("/webjars/**").permitAll()
                 .anyRequest().permitAll()
             )
-            .addFilterBefore(new JwtAuthenticationFilter(jwtTokenProvider), UsernamePasswordAuthenticationFilter.class);
+            .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
     }
