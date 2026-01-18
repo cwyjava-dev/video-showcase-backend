@@ -1,0 +1,77 @@
+spring:
+  application:
+    name: video-showcase-backend
+  
+  # 数据库配置
+  datasource:
+    url: jdbc:mysql://localhost:5506/video_showcase?useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true
+    username: root
+    password: root_password
+    driver-class-name: com.mysql.cj.jdbc.Driver
+  
+  # JPA/Hibernate 配置
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: false
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MySQL8Dialect
+        format_sql: true
+        use_sql_comments: true
+  
+  # Jackson 配置
+  jackson:
+    serialization:
+      write-dates-as-timestamps: false
+      indent-output: true
+    deserialization:
+      fail-on-unknown-properties: false
+
+# 服务器配置
+server:
+  port: 8080
+  servlet:
+    context-path: /api
+
+# JWT 配置
+jwt:
+  secret: your-secret-key-change-this-in-production-environment-with-at-least-256-bits
+  expiration: 86400000  # 24 小时（毫秒）
+  refresh-expiration: 604800000  # 7 天（毫秒）
+
+# Logging 配置
+logging:
+  level:
+    root: INFO
+    com.videoshowcase: DEBUG
+    org.springframework.web: INFO
+    org.springframework.security: DEBUG
+  pattern:
+    console: "%d{yyyy-MM-dd HH:mm:ss} - %msg%n"
+    file: "%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{36} - %msg%n"
+  file:
+    name: logs/application.log
+
+# Swagger/OpenAPI 配置
+springdoc:
+  swagger-ui:
+    path: /swagger-ui.html
+    enabled: true
+  api-docs:
+    path: /v3/api-docs
+  show-actuator: false
+
+# 文件存储配置
+file:
+  storage:
+    path: /data/videos  # 本地存储路径，可自定义
+    url: http://localhost:8080/api/files  # 文件访问 URL
+  upload:
+    max-size: 104857600  # 最大文件大小（100MB）
+
+# 静态资源配置
+spring:
+  web:
+    resources:
+      static-locations: file:/data/videos/
