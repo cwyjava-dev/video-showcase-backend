@@ -118,7 +118,7 @@ public class JwtTokenProvider {
     public boolean validateToken(String token) {
         try {
             SecretKey key = Keys.hmacShaKeyFor(jwtSecret.getBytes(StandardCharsets.UTF_8));
-            
+
             Jwts.parser()
                     .verifyWith(key)
                     .build()
