@@ -101,11 +101,11 @@ public class JwtTokenProvider {
         SecretKey key = Keys.hmacShaKeyFor(jwtSecret.getBytes(StandardCharsets.UTF_8));
         
         try {
-            return Jwts.parser()
-                    .verifyWith(key)
+            return Jwts.parserBuilder()
+                    .setSigningKey(key)
                     .build()
-                    .parseSignedClaims(token)
-                    .getPayload();
+                    .parseClaimsJws(token)
+                    .getBody();
         } catch (Exception e) {
             log.error("解析 JWT Token 失败: {}", e.getMessage());
             throw new RuntimeException("无效的 JWT Token");
@@ -118,11 +118,11 @@ public class JwtTokenProvider {
     public boolean validateToken(String token) {
         try {
             SecretKey key = Keys.hmacShaKeyFor(jwtSecret.getBytes(StandardCharsets.UTF_8));
-
-            Jwts.parser()
-                    .verifyWith(key)
+            
+            Jwts.parserBuilder()
+                    .setSigningKey(key)
                     .build()
-                    .parseSignedClaims(token);
+                    .parseClaimsJws(token);
             
             return true;
         } catch (Exception e) {
