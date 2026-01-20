@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 import java.util.stream.Collectors;
+import com.videoshowcase.entity.VideoTag;
 
 @Slf4j
 @Service
@@ -115,5 +116,22 @@ public class VideoService {
             log.error("删除视频失败", e);
             throw new RuntimeException("删除视频失败: " + e.getMessage());
         }
+    }
+
+    /**
+     * 获取所有已发布的视频
+     */
+    public List<Video> getAllPublishedVideos() {
+        return videoRepository.findAll().stream()
+            .filter(v -> v.getStatus() == Video.VideoStatus.PUBLISHED)
+            .collect(Collectors.toList());
+    }
+
+    /**
+     * 获取视频的所有标签
+     */
+    public List<VideoTag> getVideoTags(Long videoId) {
+        Video video = getVideoById(videoId);
+        return video.getTags();
     }
 }
