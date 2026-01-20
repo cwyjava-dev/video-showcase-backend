@@ -117,8 +117,8 @@ public class VideoService {
             if (video.getTags() != null) {
                 existingVideo.setTags(video.getTags());
             }
-            
-            existingVideo.setUpdatedAt(new java.util.Date());
+
+            existingVideo.setUpdatedAt(java.time.LocalDateTime.now());
             return videoRepository.save(existingVideo);
         } catch (Exception e) {
             log.error("更新视频失败", e);
