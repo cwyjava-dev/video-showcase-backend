@@ -11,7 +11,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
-import com.videoshowcase.entity.VideoTag;
 
 @RestController
 @RequestMapping("/api/videos")
@@ -34,12 +33,8 @@ public class VideoController {
 
     @GetMapping("/search")
     @Operation(summary = "搜索视频")
-    public ResponseEntity<List<Video>> searchVideos(@RequestParam(required = false, defaultValue = "") String keyword) {
-        // 如果关键字为空，返回所有已发布的视频
-        if (keyword == null || keyword.trim().isEmpty()) {
-            return ResponseEntity.ok(videoService.getAllPublishedVideos());
-        }
-        return ResponseEntity.ok(videoService.searchVideos(keyword.trim()));
+    public ResponseEntity<List<Video>> searchVideos(@RequestParam String keyword) {
+        return ResponseEntity.ok(videoService.searchVideos(keyword));
     }
 
     @PostMapping("/{id}/views")
@@ -70,21 +65,9 @@ public class VideoController {
     }
 
     @DeleteMapping("/{id}")
-    @Operation(summary = "\u524a\u9664\u89c6\u9891")
+    @Operation(summary = "删除视频")
     public ResponseEntity<Void> deleteVideo(@PathVariable Long id) {
         videoService.deleteVideo(id);
         return ResponseEntity.ok().build();
-    }
-
-    @GetMapping("/{id}/tags")
-    @Operation(summary = "获取视频的所有标签")
-    public ResponseEntity<List<VideoTag>> getVideoTags(@PathVariable Long id) {
-        return ResponseEntity.ok(videoService.getVideoTags(id));
-    }
-
-    @GetMapping("/published/all")
-    @Operation(summary = "获取所有已发布的视频")
-    public ResponseEntity<List<Video>> getAllPublishedVideos() {
-        return ResponseEntity.ok(videoService.getAllPublishedVideos());
     }
 }
