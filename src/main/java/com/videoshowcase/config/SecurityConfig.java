@@ -55,12 +55,12 @@ public class SecurityConfig {
         CorsConfiguration configuration = new CorsConfiguration();
         // 支持本地开发、Docker 和 Manus 开发环境
         configuration.setAllowedOrigins(Arrays.asList(
-            "http://localhost:3000",
+            "http://localhost:3003",
             "http://localhost:5173",
-            "http://127.0.0.1:3000",
+            "http://127.0.0.1:3003",
             "http://127.0.0.1:5173",
             "http://192.168.0.247:5173",
-            "http://192.168.0.247:3000",
+            "http://192.168.0.247:3003",
             "https://5173-if8j6cfqevtq016nzcu7k-5e63aeeb.sg1.manus.computer",
             "https://3000-if8j6cfqevtq016nzcu7k-5e63aeeb.sg1.manus.computer"
         ));
