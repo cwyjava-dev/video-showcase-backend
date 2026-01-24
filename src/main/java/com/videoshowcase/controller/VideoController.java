@@ -21,7 +21,7 @@ public class VideoController {
     private final VideoService videoService;
 
     @GetMapping
-    @Operation(summary = "获取视频列表")
+    @Operation(summary = "获取已发布的视频列表")
     public ResponseEntity<List<Video>> getAllVideos() {
         List<Video> videos = videoService.getAllVideos();
         // 转换 videoUrl 为流媒体 URL
@@ -34,7 +34,7 @@ public class VideoController {
     }
 
     @GetMapping("/search")
-    @Operation(summary = "搜索视频")
+    @Operation(summary = "搜索已发布的视频")
     public ResponseEntity<List<Video>> searchVideos(
             @RequestParam(required = false, defaultValue = "") String keyword,
             @RequestParam(required = false) Long categoryId) {
@@ -45,14 +45,14 @@ public class VideoController {
         } else {
             videos = videoService.searchVideos(keyword.trim());
         }
-        
+
         // 如果指定了分类，按分类筛选
         if (categoryId != null) {
             videos = videos.stream()
-                .filter(v -> v.getCategory() != null && v.getCategory().getId().equals(categoryId))
-                .collect(java.util.stream.Collectors.toList());
+                    .filter(v -> v.getCategory() != null && v.getCategory().getId().equals(categoryId))
+                    .collect(java.util.stream.Collectors.toList());
         }
-        
+
         // 转换 videoUrl 为流媒体 URL
         videos.forEach(video -> {
             if (video.getVideoUrl() != null && video.getVideoUrl().contains("/api/files/videos/")) {
@@ -63,22 +63,26 @@ public class VideoController {
     }
 
     @GetMapping("/published/all")
-    @Operation(summary = "\u83b7\u53d6\u6240\u6709\u5df2\u53d1\u5e03\u7684\u89c6\u9891")
+    @Operation(summary = "获取所有已发布的视频")
     public ResponseEntity<List<Video>> getAllPublishedVideos() {
         return ResponseEntity.ok(videoService.getAllPublishedVideos());
     }
 
     @GetMapping("/{id}/tags")
-    @Operation(summary = "\u83b7\u53d6\u89c6\u9891\u7684\u6240\u6709\u6807\u7b7e")
+    @Operation(summary = "获取视频的所有标签")
     public ResponseEntity<List<VideoTag>> getVideoTags(@PathVariable Long id) {
         return ResponseEntity.ok(videoService.getVideoTags(id));
     }
 
     @GetMapping("/{id}")
-    @Operation(summary = "\u83b7\u53d6\u89c6\u9891\u8be6\u60c5")
+    @Operation(summary = "获取已发布的视频详情")
     public ResponseEntity<Video> getVideoById(@PathVariable Long id) {
         Video video = videoService.getVideoById(id);
-        // \u8f6c\u6362 videoUrl \u4e3a\u6d41\u5a92\u4f53 URL
+        // 只返回已发布的视频
+        if (video.getStatus() != Video.VideoStatus.PUBLISHED) {
+            throw new RuntimeException("视频不存在");
+        }
+        // 转换 videoUrl 为流媒体 URL
         if (video.getVideoUrl() != null && video.getVideoUrl().contains("/api/files/videos/")) {
             String filename = video.getVideoUrl().substring(video.getVideoUrl().lastIndexOf("/") + 1);
             video.setVideoUrl(video.getVideoUrl().replace("/api/files/videos/", "/api/stream/video/"));
@@ -114,7 +118,7 @@ public class VideoController {
     }
 
     @DeleteMapping("/{id}")
-    @Operation(summary = "\u524a\u9664\u89c6\u9891")
+    @Operation(summary = "删除视频")
     public ResponseEntity<Void> deleteVideo(@PathVariable Long id) {
         videoService.deleteVideo(id);
         return ResponseEntity.ok().build();

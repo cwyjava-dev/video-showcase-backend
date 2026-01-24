@@ -20,10 +20,10 @@ public class VideoService {
     private final VideoRepository videoRepository;
 
     /**
-     * 获取所有视频
+     * 获取所有已发布的视频
      */
     public List<Video> getAllVideos() {
-        return videoRepository.findAll();
+        return videoRepository.findByStatus(Video.VideoStatus.PUBLISHED);
     }
 
     /**
@@ -38,7 +38,7 @@ public class VideoService {
      */
     public Video getVideoById(Long id) {
         return videoRepository.findById(id)
-            .orElseThrow(() -> new RuntimeException("视频不存在"));
+                .orElseThrow(() -> new RuntimeException("视频不存在"));
     }
 
     /**
@@ -55,9 +55,9 @@ public class VideoService {
      * 搜索视频（不分页）
      */
     public List<Video> searchVideos(String keyword) {
-        return videoRepository.findAll().stream()
-            .filter(v -> v.getTitle() != null && v.getTitle().toLowerCase().contains(keyword.toLowerCase()))
-            .collect(Collectors.toList());
+        return videoRepository.findByStatus(Video.VideoStatus.PUBLISHED).stream()
+                .filter(v -> v.getTitle() != null && v.getTitle().toLowerCase().contains(keyword.toLowerCase()))
+                .collect(Collectors.toList());
     }
 
     /**
@@ -65,7 +65,7 @@ public class VideoService {
      */
     public Page<Video> searchVideos(String keyword, Pageable pageable) {
         return videoRepository.findByStatusAndTitleContainingIgnoreCase(
-            Video.VideoStatus.PUBLISHED, keyword, pageable
+                Video.VideoStatus.PUBLISHED, keyword, pageable
         );
     }
 
@@ -96,8 +96,8 @@ public class VideoService {
                 throw new RuntimeException("视频不存在");
             }
             Video existingVideo = videoRepository.findById(video.getId())
-                .orElseThrow(() -> new RuntimeException("视频不存在"));
-            
+                    .orElseThrow(() -> new RuntimeException("视频不存在"));
+
             // 只更新允许修改的字段
             if (video.getTitle() != null) {
                 existingVideo.setTitle(video.getTitle());
@@ -117,7 +117,7 @@ public class VideoService {
             if (video.getTags() != null) {
                 existingVideo.setTags(video.getTags());
             }
-            
+
             existingVideo.setUpdatedAt(java.time.LocalDateTime.now());
             return videoRepository.save(existingVideo);
         } catch (Exception e) {
@@ -142,10 +142,10 @@ public class VideoService {
     }
 
     /**
-     * 获取所有视频（不管状态）
+     * 获取所有已发布的视频
      */
     public List<Video> getAllPublishedVideos() {
-        return videoRepository.findAll();
+        return videoRepository.findByStatus(Video.VideoStatus.PUBLISHED);
     }
 
     /**
