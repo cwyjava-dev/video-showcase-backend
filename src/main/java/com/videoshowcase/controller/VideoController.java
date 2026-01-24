@@ -22,8 +22,17 @@ public class VideoController {
 
     @GetMapping
     @Operation(summary = "获取已发布的视频列表")
-    public ResponseEntity<List<Video>> getAllVideos() {
+    public ResponseEntity<List<Video>> getAllVideos(
+            @RequestParam(required = false) Long categoryId) {
         List<Video> videos = videoService.getAllVideos();
+
+        // 如果指定了分类，按分类筛选
+        if (categoryId != null) {
+            videos = videos.stream()
+                    .filter(v -> v.getCategory() != null && v.getCategory().getId().equals(categoryId))
+                    .collect(java.util.stream.Collectors.toList());
+        }
+
         // 转换 videoUrl 为流媒体 URL
         videos.forEach(video -> {
             if (video.getVideoUrl() != null && video.getVideoUrl().contains("/api/files/videos/")) {
@@ -35,8 +44,17 @@ public class VideoController {
 
     @GetMapping("/admin/all")
     @Operation(summary = "获取所有视频（包括草稿）- 仅管理员")
-    public ResponseEntity<List<Video>> getAllVideosForAdmin() {
+    public ResponseEntity<List<Video>> getAllVideosForAdmin(
+            @RequestParam(required = false) Long categoryId) {
         List<Video> videos = videoService.getAllVideosIncludingDraft();
+
+        // 如果指定了分类，按分类筛选
+        if (categoryId != null) {
+            videos = videos.stream()
+                    .filter(v -> v.getCategory() != null && v.getCategory().getId().equals(categoryId))
+                    .collect(java.util.stream.Collectors.toList());
+        }
+
         // 转换 videoUrl 为流媒体 URL
         videos.forEach(video -> {
             if (video.getVideoUrl() != null && video.getVideoUrl().contains("/api/files/videos/")) {
