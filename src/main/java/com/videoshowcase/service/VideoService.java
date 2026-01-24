@@ -149,6 +149,13 @@ public class VideoService {
     }
 
     /**
+     * 获取所有视频（包括草稿）- 仅管理员
+     */
+    public List<Video> getAllVideosIncludingDraft() {
+        return videoRepository.findAll();
+    }
+
+    /**
      * 获取视频的所有标签
      */
     public List<VideoTag> getVideoTags(Long videoId) {

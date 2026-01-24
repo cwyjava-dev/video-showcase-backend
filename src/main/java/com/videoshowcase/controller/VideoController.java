@@ -33,6 +33,19 @@ public class VideoController {
         return ResponseEntity.ok(videos);
     }
 
+    @GetMapping("/admin/all")
+    @Operation(summary = "获取所有视频（包括草稿）- 仅管理员")
+    public ResponseEntity<List<Video>> getAllVideosForAdmin() {
+        List<Video> videos = videoService.getAllVideosIncludingDraft();
+        // 转换 videoUrl 为流媒体 URL
+        videos.forEach(video -> {
+            if (video.getVideoUrl() != null && video.getVideoUrl().contains("/api/files/videos/")) {
+                video.setVideoUrl(video.getVideoUrl().replace("/api/files/videos/", "/api/stream/video/"));
+            }
+        });
+        return ResponseEntity.ok(videos);
+    }
+
     @GetMapping("/search")
     @Operation(summary = "搜索已发布的视频")
     public ResponseEntity<List<Video>> searchVideos(
