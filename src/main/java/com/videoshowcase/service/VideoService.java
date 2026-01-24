@@ -114,6 +114,12 @@ public class VideoService {
             if (video.getStatus() != null) {
                 existingVideo.setStatus(video.getStatus());
             }
+            if (video.getVideoUrl() != null) {
+                existingVideo.setVideoUrl(video.getVideoUrl());
+            }
+            if (video.getVideoType() != null) {
+                existingVideo.setVideoType(video.getVideoType());
+            }
             if (video.getTags() != null) {
                 existingVideo.setTags(video.getTags());
             }
